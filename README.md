@@ -8,6 +8,6 @@ Use Case Diagram - Playing Game
 ------------
 ![playing](playingGame.png)
 
-ER Diagram
+ER & Schema Diagram
 ------------
 ![ER](ERdiagram.png)
