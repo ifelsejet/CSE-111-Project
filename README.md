@@ -7,3 +7,7 @@ Use Case Diagram - Starting Game
 Use Case Diagram - Playing Game
 ------------
 ![playing](playingGame.png)
+
+ER Diagram
+------------
+![ER](ERdiagram.png)
