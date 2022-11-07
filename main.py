@@ -65,9 +65,9 @@ def createStatsTable(_conn):
         #             w_nationkey decimal(2,0) not null
         sql = """CREATE TABLE stats (
                     s_id decimal(9,0) not null,
-                    s_category char(100) not null,
-                    s_type decimal(6,0) not null,
-                    s_answer decimal(9,0) not null)"""
+                    s_category TEXT not null,
+                    s_type TEXT not null,
+                    s_answer TEXT not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -89,9 +89,9 @@ def createQuestionsTable(_conn):
         #             w_nationkey decimal(2,0) not null
         sql = """CREATE TABLE questions (
                     q_id decimal(9,0) not null,
-                    q_question char(100) not null,
-                    q_type decimal(6,0) not null,
-                    q_stat decimal(9,0) not null)"""
+                    q_question TEXT not null,
+                    q_type TEXT not null,
+                    q_stat TEXT not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -178,7 +178,12 @@ def populateTables(_conn):
     print("Populate tables")
     cur=_conn.cursor()
 
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 200, 1))
+    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 5000, 1))
+    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(2,'Steph Curry', 2012, 1, 4210, 2))
+    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(3,'Kyrie Irving', 2010, 1, 4120, 3))
+    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(4,'Anthony Davis', 2014, 22, 3200, 4))
+    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(5,'James Harden', 2008, 3, 4200, 5))
+    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(6,'Russell Westbrook', 2008, 1, 3200, 6))
     counter=1
     print("++++++++++++++++++++++++++++++++++")
 
