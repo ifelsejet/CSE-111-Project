@@ -39,7 +39,7 @@ def createPlayerTable(_conn):
         #             w_nationkey decimal(2,0) not null
         sql = """CREATE TABLE player (
                     p_id decimal(9,0) not null,
-                    p_name char(100) not null,
+                    p_name TEXT not null,
                     p_draftYear decimal(6,0) not null,
                     p_draftpos decimal(9,0) not null,
                     p_games decimal(2,0) not null,
@@ -173,6 +173,15 @@ def createPayrollTable(_conn):
         print(e)
     print("++++++++++++++++++++++++++++++++++")
 
+def populateTables(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Populate tables")
+    cur=_conn.cursor()
+
+    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 200, 1))
+    counter=1
+    print("++++++++++++++++++++++++++++++++++")
+
 def dropTables(_conn):
     print("++++++++++++++++++++++++++++++++++")
     print("Drop tables")
@@ -212,7 +221,7 @@ def main():
         createStatsTable(conn)
         createQuestionsTable(conn)
         createQuestionTypesTable(conn)
-        #populateTable(conn)
+        populateTables(conn)
 
     closeConnection(conn, database)
 
