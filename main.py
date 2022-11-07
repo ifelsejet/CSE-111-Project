@@ -1,0 +1,174 @@
+import sqlite3
+from sqlite3 import Error
+
+def openConnection(_dbFile):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Open database: ", _dbFile)
+
+    conn = None
+    try:
+        conn = sqlite3.connect(_dbFile)
+        print("success")
+    except Error as e:
+        print(e)
+
+    print("++++++++++++++++++++++++++++++++++")
+
+    return conn
+
+def closeConnection(_conn, _dbFile):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Close database: ", _dbFile)
+
+    try:
+        _conn.close()
+        print("success")
+    except Error as e:
+        print(e)
+
+    print("++++++++++++++++++++++++++++++++++")
+
+def createPlayerTable(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Create table")
+    try:
+        # w_warehousekey decimal(9,0) not null,
+        #             w_name char(100) not null,
+        #             w_capacity decimal(6,0) not null,
+        #             w_suppkey decimal(9,0) not null,
+        #             w_nationkey decimal(2,0) not null
+        sql = """CREATE TABLE player (
+                    p_id decimal(9,0) not null,
+                    p_name char(100) not null,
+                    p_draftYear decimal(6,0) not null,
+                    p_draftpos decimal(9,0) not null,
+                    p_games decimal(2,0) not null)
+                    p_stats decimal(9,0) not null"""
+
+        _conn.execute(sql)
+        # _conn.execute("COMMIT")
+        _conn.commit()
+        print("success")
+    except Error as e:
+       # _conn.execute("ROLLBACK")
+        print(e)
+    print("++++++++++++++++++++++++++++++++++")
+
+def createStatsTable(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Create table")
+    try:
+        # w_warehousekey decimal(9,0) not null,
+        #             w_name char(100) not null,
+        #             w_capacity decimal(6,0) not null,
+        #             w_suppkey decimal(9,0) not null,
+        #             w_nationkey decimal(2,0) not null
+        sql = """CREATE TABLE stats (
+                    s_id decimal(9,0) not null,
+                    s_category char(100) not null,
+                    s_type decimal(6,0) not null,
+                    s_answer decimal(9,0) not null"""
+
+        _conn.execute(sql)
+        # _conn.execute("COMMIT")
+        _conn.commit()
+        print("success")
+    except Error as e:
+       # _conn.execute("ROLLBACK")
+        print(e)
+    print("++++++++++++++++++++++++++++++++++")
+
+def createQuestionsTable(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Create table")
+    try:
+        # w_warehousekey decimal(9,0) not null,
+        #             w_name char(100) not null,
+        #             w_capacity decimal(6,0) not null,
+        #             w_suppkey decimal(9,0) not null,
+        #             w_nationkey decimal(2,0) not null
+        sql = """CREATE TABLE questions (
+                    q_id decimal(9,0) not null,
+                    q_question char(100) not null,
+                    q_type decimal(6,0) not null,
+                    q_stat decimal(9,0) not null,"""
+
+        _conn.execute(sql)
+        # _conn.execute("COMMIT")
+        _conn.commit()
+        print("success")
+    except Error as e:
+       # _conn.execute("ROLLBACK")
+        print(e)
+    print("++++++++++++++++++++++++++++++++++")
+
+def createQuestionTypesTable(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Create table")
+    try:
+        # w_warehousekey decimal(9,0) not null,
+        #             w_name char(100) not null,
+        #             w_capacity decimal(6,0) not null,
+        #             w_suppkey decimal(9,0) not null,
+        #             w_nationkey decimal(2,0) not null
+        sql = """CREATE TABLE questionTypes (
+                    qt_id decimal(9,0) not null,
+                    qt_type char(100) not null"""
+
+        _conn.execute(sql)
+        # _conn.execute("COMMIT")
+        _conn.commit()
+        print("success")
+    except Error as e:
+       # _conn.execute("ROLLBACK")
+        print(e)
+    print("++++++++++++++++++++++++++++++++++")
+
+def createTeamTable(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Create table")
+    try:
+        # w_warehousekey decimal(9,0) not null,
+        #             w_name char(100) not null,
+        #             w_capacity decimal(6,0) not null,
+        #             w_suppkey decimal(9,0) not null,
+        #             w_nationkey decimal(2,0) not null
+        sql = """CREATE TABLE team (
+                    t_id decimal(9,0) not null,
+                    t_name char(100) not null,
+                    t_yearFounded decimal(6,0) not null,
+                    t_numChampionships decimal(9,0) not null,
+                    t_statsID decimal(2,0) not null)"""
+
+        _conn.execute(sql)
+        # _conn.execute("COMMIT")
+        _conn.commit()
+        print("success")
+    except Error as e:
+       # _conn.execute("ROLLBACK")
+        print(e)
+    print("++++++++++++++++++++++++++++++++++")
+
+def createPayrollTable(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Create table")
+    try:
+        # w_warehousekey decimal(9,0) not null,
+        #             w_name char(100) not null,
+        #             w_capacity decimal(6,0) not null,
+        #             w_suppkey decimal(9,0) not null,
+        #             w_nationkey decimal(2,0) not null
+        sql = """CREATE TABLE payroll (
+                    t_id decimal(9,0) not null,
+                    pl_year char(100) not null,
+                    p_id decimal(6,0) not null,
+                    player_salary decimal(9,0) not null"""
+
+        _conn.execute(sql)
+        # _conn.execute("COMMIT")
+        _conn.commit()
+        print("success")
+    except Error as e:
+       # _conn.execute("ROLLBACK")
+        print(e)
+    print("++++++++++++++++++++++++++++++++++")
