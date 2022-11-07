@@ -42,8 +42,8 @@ def createPlayerTable(_conn):
                     p_name char(100) not null,
                     p_draftYear decimal(6,0) not null,
                     p_draftpos decimal(9,0) not null,
-                    p_games decimal(2,0) not null)
-                    p_stats decimal(9,0) not null"""
+                    p_games decimal(2,0) not null,
+                    p_stats decimal(9,0) not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -67,7 +67,7 @@ def createStatsTable(_conn):
                     s_id decimal(9,0) not null,
                     s_category char(100) not null,
                     s_type decimal(6,0) not null,
-                    s_answer decimal(9,0) not null"""
+                    s_answer decimal(9,0) not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -91,7 +91,7 @@ def createQuestionsTable(_conn):
                     q_id decimal(9,0) not null,
                     q_question char(100) not null,
                     q_type decimal(6,0) not null,
-                    q_stat decimal(9,0) not null,"""
+                    q_stat decimal(9,0) not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -113,7 +113,7 @@ def createQuestionTypesTable(_conn):
         #             w_nationkey decimal(2,0) not null
         sql = """CREATE TABLE questionTypes (
                     qt_id decimal(9,0) not null,
-                    qt_type char(100) not null"""
+                    qt_type char(100) not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -162,7 +162,7 @@ def createPayrollTable(_conn):
                     t_id decimal(9,0) not null,
                     pl_year char(100) not null,
                     p_id decimal(6,0) not null,
-                    player_salary decimal(9,0) not null"""
+                    player_salary decimal(9,0) not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -172,3 +172,50 @@ def createPayrollTable(_conn):
        # _conn.execute("ROLLBACK")
         print(e)
     print("++++++++++++++++++++++++++++++++++")
+
+def dropTables(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Drop tables")
+    _conn.execute("BEGIN")
+    try:
+        playerSql = "DROP TABLE player"
+        questionsSql = "DROP TABLE questions"
+        questionTypesSql = "DROP TABLE questionTypes"
+        teamSql = "DROP TABLE team"
+        payrollSql = "DROP TABLE payroll"
+        statsSql = "DROP TABLE stats"
+
+        _conn.execute(playerSql)
+        _conn.execute(questionsSql)
+        _conn.execute(questionTypesSql)
+        _conn.execute(teamSql)
+        _conn.execute(payrollSql)
+        _conn.execute(statsSql)
+        # _conn.execute("COMMIT")
+        _conn.commit()
+        print("success")
+    except Error as e:
+        #_conn.execute("ROLLBACK")
+        print(e)
+    print("++++++++++++++++++++++++++++++++++")
+
+def main():
+    database = r"basketball.sqlite"
+
+    # create a database connection
+    conn = openConnection(database)
+    with conn:
+        dropTables(conn)
+        createTeamTable(conn)
+        createPayrollTable(conn)
+        createPlayerTable(conn)
+        createStatsTable(conn)
+        createQuestionsTable(conn)
+        createQuestionTypesTable(conn)
+        #populateTable(conn)
+
+    closeConnection(conn, database)
+
+
+if __name__ == '__main__':
+    main()
