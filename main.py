@@ -38,13 +38,13 @@ def createPlayerTable(_conn):
         #             w_capacity decimal(6,0) not null,
         #             w_suppkey decimal(9,0) not null,
         #             w_nationkey decimal(2,0) not null
+
+        # Jet - removing p_id, p_games, p_stats for now (11/7)
         sql = """CREATE TABLE player (
-                    p_id decimal(9,0) not null,
                     p_name TEXT not null,
-                    p_draftYear decimal(6,0) not null,
-                    p_draftpos decimal(9,0) not null,
-                    p_games decimal(2,0) not null,
-                    p_stats decimal(9,0) not null)"""
+                    p_draftYear int not null,
+                    p_draftpos int)
+                    """
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -53,6 +53,8 @@ def createPlayerTable(_conn):
     except Error as e:
        # _conn.execute("ROLLBACK")
         print(e)
+        print("AYOOO")
+
     print("++++++++++++++++++++++++++++++++++")
 
 def createStatsTable(_conn):
@@ -179,7 +181,7 @@ def populatePlayerTable(_conn):
     print("++++++++++++++++++++++++++++++++++")
     print("Populate tables")
     cur=_conn.cursor()
-    file = open('data/players.csv')
+    file = open('data/players.csv' , encoding="utf8")
  
     # Reading the contents of the
     # players.csv file
@@ -187,7 +189,7 @@ def populatePlayerTable(_conn):
  
     # SQL query to insert data into the
     # person table
-    insert_records = "INSERT INTO player VALUES(?, ?, ?, ?)"
+    insert_records = "INSERT INTO player VALUES(?, ?, ?)"
  
     # Importing the contents of the file
     # into our person table
