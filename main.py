@@ -380,7 +380,7 @@ def GrabQuestion(_conn):
             fullQuestionSQL = """
                         SELECT {}, {}
                         FROM {}
-                        ORDER BY RANDOM() LIMIT 2
+                        ORDER BY RANDOM() LIMIT 1
                         """.format(statTuple[1], statTuple[2], questionTuple[0][2])
             cur.execute(fullQuestionSQL)
             fullQuestion = cur.fetchall()
@@ -392,7 +392,7 @@ def GrabQuestion(_conn):
             fullQuestionSQL = """
                         SELECT {}, {}, {}
                         FROM {}
-                        ORDER BY RANDOM() LIMIT 2
+                        ORDER BY RANDOM() LIMIT 1
             """.format(statTuple[0], statTuple[1], statTuple[2], questionTuple[0][2])
         
             cur.execute(fullQuestionSQL)
@@ -406,7 +406,7 @@ def GrabQuestion(_conn):
             fullQuestionSQL = """
                         SELECT  {}, {}
                         FROM {}
-                        ORDER BY RANDOM() LIMIT 2
+                        ORDER BY RANDOM() LIMIT 1
             """.format(statTuple[0], statTuple[1], questionTuple[0][2])
         
             cur.execute(fullQuestionSQL)
@@ -420,7 +420,7 @@ def GrabQuestion(_conn):
             # 0 - lower, 1- higher (for now)
             p2guess = input("Player 2, higher (1) or lower(0) ?: ")
             p2guess = int(p2guess)
-            if(p1guess < fullQuestion[0][2] and p2guess == 1):
+            if(p1guess < fullQuestion[0][len(fullQuestion[0])-1] and p2guess == 1):
                 print("Player 2 wins a point!")
             elif(p1guess > fullQuestion[0][2] and p2guess == 0):
                 print("Player 2 wins a point!")
