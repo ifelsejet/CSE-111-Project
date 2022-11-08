@@ -1,5 +1,5 @@
 1,“How much money did {} make in {}”,payroll,Player,“player_name pl_year player_salary”
-2,How many {} did {} average in his career?,stats,Player,PTS p_name average
+2,How many {} did {} average in his career?,stats,Player,PTS s_name average
 3,How many champions have the {} won?,team,team,t_name
 4,What year were the {} founded in?,team,team,t_name
 5,How many total NBA teams are there?,team,team,total
