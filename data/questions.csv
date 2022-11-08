@@ -1,3 +1,20 @@
 1,“How much money did {} make in {}”,payroll,Player,“player_name pl_year player_salary”
 2,How many {} did {} average in his career?,stats,Player,PTS p_name average
-3,How many champions have the {} won?,team,TEAM,t_name
+3,How many champions have the {} won?,team,team,t_name
+4,What year were the {} founded in?,team,team,t_name
+5,,,,
+6,,,,
+7,,,,
+8,,,,
+9,,,,
+10,,,,
+11,,,,
+12,,,,
+13,,,,
+14,,,,
+15,,,,
+16,,,,
+17,,,,
+18,,,,
+19,,,,
+20,,,,
