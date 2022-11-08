@@ -399,6 +399,19 @@ def GrabQuestion(_conn):
             fullQuestion = cur.fetchall()
             print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
             print("Answer: " + str(fullQuestion[0][2]))
+        elif questionType[0][1] == "team":
+            print("IS IN PAYROLL")
+            statTuple = questionTuple[0][4].split()
+            fullQuestionSQL = """
+                        SELECT {}, {}, {}
+                        FROM {}
+                        ORDER BY RANDOM() LIMIT 2
+            """.format(statTuple[0], statTuple[1], statTuple[2], questionTuple[0][2])
+        
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+            print("Answer: " + str(fullQuestion[0][2]))
         if (x == 20):
             print("SAMPLE GAMEPLAY ")
             p1guess = input("Player 1 enter guess: ")
