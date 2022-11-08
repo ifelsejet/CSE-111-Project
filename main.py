@@ -355,34 +355,50 @@ def dropTables(_conn):
 
 def GrabQuestion(_conn):
     print("++++++++++++++++++++++++++++++++++")
-    print("Grab Question")
-    cur=_conn.cursor()
-    questionTypeSQL = "SELECT * FROM questionTypes ORDER BY RANDOM() LIMIT 2;"
-    cur.execute(questionTypeSQL)
-    questionType = cur.fetchall()
-    print(questionType[0][1])
-    questionSQL = """SELECT * 
-                    FROM questions 
-                    WHERE q_type = '{}'
-                    """.format(questionType[0][1])
-    cur.execute(questionSQL)
-    questionTuple = cur.fetchall()
+    #print("Grab Question")
+    # 20 random queries
+    for x in range(1,21):
+        print("Grab Sample Question %d" % (x))
+        cur=_conn.cursor()
+        questionTypeSQL = "SELECT * FROM questionTypes ORDER BY RANDOM() LIMIT 2;"
+        cur.execute(questionTypeSQL)
+        questionType = cur.fetchall()
+        print(questionType[0][1])
+        questionSQL = """SELECT * 
+                        FROM questions 
+                        WHERE q_type = '{}'
+                        """.format(questionType[0][1])
+        cur.execute(questionSQL)
+        questionTuple = cur.fetchall()
 
-    print("Question: "+ questionTuple[0][1])
-    print("Stat: " + questionTuple[0][4])
-    stat = questionTuple[0][4]
-    stat = stat[1:-1]
-    stat = stat.split()
-    fullQuestionSQL = """
-                    SELECT {}, {}, {}
-                    FROM {}
-                    ORDER BY RANDOM() LIMIT 2
-    """.format(stat[0], stat[1], stat[2], questionTuple[0][2])
+        print("Question: "+ questionTuple[0][1])
+        print("Stat: " + questionTuple[0][4])
+        stat = questionTuple[0][4]
+        stat = stat[1:-1]
+        stat = stat.split()
+        fullQuestionSQL = """
+                        SELECT {}, {}, {}
+                        FROM {}
+                        ORDER BY RANDOM() LIMIT 2
+        """.format(stat[0], stat[1], stat[2], questionTuple[0][2])
 
-    cur.execute(fullQuestionSQL)
-    fullQuestion = cur.fetchall()
-    print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
-    print("Answer: " + str(fullQuestion[0][2]))
+        cur.execute(fullQuestionSQL)
+        fullQuestion = cur.fetchall()
+        print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+        if (x == 20):
+            print("SAMPLE GAMEPLAY ")
+            p1guess = input("Player 1 enter guess: ")
+            p1guess = int(p1guess)
+            # 0 - lower, 1- higher (for now)
+            p2guess = input("Player 2, higher (1) or lower(0) ?: ")
+            p2guess = int(p2guess)
+            if(p1guess < fullQuestion[0][2] and p2guess == 1):
+                print("Player 2 wins a point!")
+            elif(p1guess > fullQuestion[0][2] and p2guess == 0):
+                print("Player 2 wins a point!")
+            else:
+                print("Player 1 wins a point!")
+        print("Answer: " + str(fullQuestion[0][2]))
     print("++++++++++++++++++++++++++++++++++")
 
 def main():
