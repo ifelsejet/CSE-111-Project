@@ -1,4 +1,5 @@
 import sqlite3
+import csv
 from sqlite3 import Error
 
 def openConnection(_dbFile):
@@ -137,8 +138,7 @@ def createTeamTable(_conn):
                     t_id decimal(9,0) not null,
                     t_name char(100) not null,
                     t_yearFounded decimal(6,0) not null,
-                    t_numChampionships decimal(9,0) not null,
-                    t_statsID decimal(2,0) not null)"""
+                    t_numChampionships decimal(9,0) not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -159,10 +159,12 @@ def createPayrollTable(_conn):
         #             w_suppkey decimal(9,0) not null,
         #             w_nationkey decimal(2,0) not null
         sql = """CREATE TABLE payroll (
-                    t_id decimal(9,0) not null,
-                    pl_year char(100) not null,
-                    p_id decimal(6,0) not null,
-                    player_salary decimal(9,0) not null)"""
+                    rank decimal(6,0) not null,
+                    player_name TEXT not null,
+                    position TEXT not null,
+                    team TEXT not null,
+                    player_salary decimal(9,0) not null,
+                    pl_year decimal(6,0) not null)"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -189,16 +191,22 @@ def populatePlayerTable(_conn):
 
 def populateTeamTable(_conn):
     print("++++++++++++++++++++++++++++++++++")
-    print("Populate tables")
+    print("Populate Team Table")
     cur=_conn.cursor()
-
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 5000, 1))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(2,'Steph Curry', 2012, 1, 4210, 2))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(3,'Kyrie Irving', 2010, 1, 4120, 3))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(4,'Anthony Davis', 2014, 22, 3200, 4))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(5,'James Harden', 2008, 3, 4200, 5))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(6,'Russell Westbrook', 2008, 1, 3200, 6))
-    counter=1
+    # Opening the person-records.csv file
+    file = open('data/NBA_team_table.csv')
+ 
+    # Reading the contents of the
+    # person-records.csv file
+    contents = csv.reader(file)
+ 
+    # SQL query to insert data into the
+    # person table
+    insert_records = "INSERT INTO team VALUES(?, ?, ?, ?)"
+ 
+    # Importing the contents of the file
+    # into our person table
+    cur.executemany(insert_records, contents)
     print("++++++++++++++++++++++++++++++++++")
 
 def populateStatsTable(_conn):
@@ -231,16 +239,22 @@ def populateQuestionsTable(_conn):
 
 def populatePayrollTable(_conn):
     print("++++++++++++++++++++++++++++++++++")
-    print("Populate tables")
+    print("Populate Payroll tables")
     cur=_conn.cursor()
-
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 5000, 1))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(2,'Steph Curry', 2012, 1, 4210, 2))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(3,'Kyrie Irving', 2010, 1, 4120, 3))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(4,'Anthony Davis', 2014, 22, 3200, 4))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(5,'James Harden', 2008, 3, 4200, 5))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(6,'Russell Westbrook', 2008, 1, 3200, 6))
-    counter=1
+        # Opening the person-records.csv file
+    file = open('data/NBA-salaries.csv')
+ 
+    # Reading the contents of the
+    # person-records.csv file
+    contents = csv.reader(file)
+ 
+    # SQL query to insert data into the
+    # person table
+    insert_records = "INSERT INTO payroll VALUES(?, ?, ?, ?, ?, ?)"
+ 
+    # Importing the contents of the file
+    # into our person table
+    cur.executemany(insert_records, contents)
     print("++++++++++++++++++++++++++++++++++")
 
 def populateQuestionTypesTable(_conn):
@@ -297,6 +311,8 @@ def main():
         createQuestionsTable(conn)
         createQuestionTypesTable(conn)
         populatePlayerTable(conn)
+        populateTeamTable(conn)
+        populatePayrollTable(conn)
 
     closeConnection(conn, database)
 
