@@ -202,7 +202,7 @@ def populateTeamTable(_conn):
     print("Populate Team Table")
     cur=_conn.cursor()
     # Opening the person-records.csv file
-    file = open('data/NBA_team_table.csv')
+    file = open('data/NBA_team_table.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
@@ -236,7 +236,7 @@ def populateQuestionsTable(_conn):
     print("Populate tables")
     cur=_conn.cursor()
     # Opening the person-records.csv file
-    file = open('data/questions.csv')
+    file = open('data/questions.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
@@ -256,7 +256,7 @@ def populatePayrollTable(_conn):
     print("Populate Payroll tables")
     cur=_conn.cursor()
         # Opening the person-records.csv file
-    file = open('data/NBA-salaries.csv')
+    file = open('data/NBA-salaries.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
@@ -276,7 +276,7 @@ def populateQuestionTypesTable(_conn):
     print("Populate tables")
     cur=_conn.cursor()
     # Opening the person-records.csv file
-    file = open('data/questionTypes.csv')
+    file = open('data/questionTypes.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
