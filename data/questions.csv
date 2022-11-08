@@ -10,3 +10,6 @@
 10,How many championships did {} win in his career?,stats,Player,s_name s_rings
 11,How many MVPS did {} win in his career?,stats,Player,s_name s_MVP
 12,How many Final MVPS did {} win in his career?,stats,Player,s_name s_finalsMVP
+13,How many {} has {} been a part of?,stats,Player, games s_games s_name
+14,How many NBA Championships have there been?,team,team, SUM(t_numChampionships)
+15,How many {} has {} played in the NBA?,stats,Player, years s_years s_name
