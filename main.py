@@ -338,10 +338,10 @@ def GrabQuestion(_conn):
     stat = stat[1:-1]
     stat = stat.split()
     fullQuestionSQL = """
-                    SELECT {}, {}, player_salary
-                    FROM payroll
+                    SELECT {}, {}, {}
+                    FROM {}
                     ORDER BY RANDOM() LIMIT 2
-    """.format(stat[0], stat[1])
+    """.format(stat[0], stat[1], stat[2], questionTuple[0][2])
 
     cur.execute(fullQuestionSQL)
     fullQuestion = cur.fetchall()

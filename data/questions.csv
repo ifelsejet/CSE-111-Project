@@ -1,1 +1,2 @@
-1,“How much money did {} make in {}”,Salary,Player,“player_name pl_year”
+1,“How much money did {} make in {}”,payroll,Player,“player_name pl_year player_salary”
+2,"How many {} did {} average in his career?",stats,Player,"PTS p_name average"
