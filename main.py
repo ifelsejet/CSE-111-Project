@@ -94,6 +94,7 @@ def createQuestionsTable(_conn):
                     q_id decimal(9,0) not null,
                     q_question TEXT not null,
                     q_type TEXT not null,
+                    q_category TEXT not null,
                     q_stat TEXT not null)"""
 
         _conn.execute(sql)
@@ -234,14 +235,20 @@ def populateQuestionsTable(_conn):
     print("++++++++++++++++++++++++++++++++++")
     print("Populate tables")
     cur=_conn.cursor()
-
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 5000, 1))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(2,'Steph Curry', 2012, 1, 4210, 2))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(3,'Kyrie Irving', 2010, 1, 4120, 3))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(4,'Anthony Davis', 2014, 22, 3200, 4))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(5,'James Harden', 2008, 3, 4200, 5))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(6,'Russell Westbrook', 2008, 1, 3200, 6))
-    counter=1
+    # Opening the person-records.csv file
+    file = open('data/questions.csv')
+ 
+    # Reading the contents of the
+    # person-records.csv file
+    contents = csv.reader(file)
+ 
+    # SQL query to insert data into the
+    # person table
+    insert_records = "INSERT INTO questions VALUES(?, ?, ?, ?, ?)"
+ 
+    # Importing the contents of the file
+    # into our person table
+    cur.executemany(insert_records, contents)
     print("++++++++++++++++++++++++++++++++++")
 
 def populatePayrollTable(_conn):
@@ -268,14 +275,20 @@ def populateQuestionTypesTable(_conn):
     print("++++++++++++++++++++++++++++++++++")
     print("Populate tables")
     cur=_conn.cursor()
-
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 5000, 1))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(2,'Steph Curry', 2012, 1, 4210, 2))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(3,'Kyrie Irving', 2010, 1, 4120, 3))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(4,'Anthony Davis', 2014, 22, 3200, 4))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(5,'James Harden', 2008, 3, 4200, 5))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(6,'Russell Westbrook', 2008, 1, 3200, 6))
-    counter=1
+    # Opening the person-records.csv file
+    file = open('data/questionTypes.csv')
+ 
+    # Reading the contents of the
+    # person-records.csv file
+    contents = csv.reader(file)
+ 
+    # SQL query to insert data into the
+    # person table
+    insert_records = "INSERT INTO questionTypes VALUES(?, ?)"
+ 
+    # Importing the contents of the file
+    # into our person table
+    cur.executemany(insert_records, contents)
     print("++++++++++++++++++++++++++++++++++")
 
 def dropTables(_conn):
@@ -304,6 +317,38 @@ def dropTables(_conn):
         print(e)
     print("++++++++++++++++++++++++++++++++++")
 
+def GrabQuestion(_conn):
+    print("++++++++++++++++++++++++++++++++++")
+    print("Grab Question")
+    cur=_conn.cursor()
+    questionTypeSQL = "SELECT * FROM questionTypes ORDER BY RANDOM() LIMIT 2;"
+    cur.execute(questionTypeSQL)
+    questionType = cur.fetchall()
+    print(questionType[0][1])
+    questionSQL = """SELECT * 
+                    FROM questions 
+                    WHERE q_type = '{}'
+                    """.format(questionType[0][1])
+    cur.execute(questionSQL)
+    questionTuple = cur.fetchall()
+
+    print("Question: "+ questionTuple[0][1])
+    print("Stat: " + questionTuple[0][4])
+    stat = questionTuple[0][4]
+    stat = stat[1:-1]
+    stat = stat.split()
+    fullQuestionSQL = """
+                    SELECT {}, {}, player_salary
+                    FROM payroll
+                    ORDER BY RANDOM() LIMIT 2
+    """.format(stat[0], stat[1])
+
+    cur.execute(fullQuestionSQL)
+    fullQuestion = cur.fetchall()
+    print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+    print("Answer: " + str(fullQuestion[0][2]))
+    print("++++++++++++++++++++++++++++++++++")
+
 def main():
     database = r"basketball.sqlite"
 
@@ -320,7 +365,9 @@ def main():
         populatePlayerTable(conn)
         populateTeamTable(conn)
         populatePayrollTable(conn)
-
+        populateQuestionsTable(conn)
+        populateQuestionTypesTable(conn)
+    GrabQuestion(conn)
     closeConnection(conn, database)
 
 
