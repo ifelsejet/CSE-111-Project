@@ -370,21 +370,35 @@ def GrabQuestion(_conn):
                         """.format(questionType[0][1])
         cur.execute(questionSQL)
         questionTuple = cur.fetchall()
-
         print("Question: "+ questionTuple[0][1])
         print("Stat: " + questionTuple[0][4])
-        stat = questionTuple[0][4]
-        stat = stat[1:-1]
-        stat = stat.split()
-        fullQuestionSQL = """
+        print(questionType[0][1])
+        if questionType[0][1] == "stats":
+            print("IS IN STATS BLOCK")
+            statTuple = questionTuple[0][4].split()
+            statType = statTuple[0] # PTS, REB, etc.
+            fullQuestionSQL = """
+                        SELECT {}, {}
+                        FROM {}
+                        ORDER BY RANDOM() LIMIT 2
+                        """.format(statTuple[1], statTuple[2], questionTuple[0][2])
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            print(questionTuple[0][1].format(statType,fullQuestion[0][0]))
+            print("Answer: " + str(fullQuestion[0][1]))
+        elif questionType[0][1] == "payroll":
+            print("IS IN PAYROLL")
+            statTuple = questionTuple[0][4].split()
+            fullQuestionSQL = """
                         SELECT {}, {}, {}
                         FROM {}
                         ORDER BY RANDOM() LIMIT 2
-        """.format(stat[0], stat[1], stat[2], questionTuple[0][2])
-
-        cur.execute(fullQuestionSQL)
-        fullQuestion = cur.fetchall()
-        print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+            """.format(statTuple[0], statTuple[1], statTuple[2], questionTuple[0][2])
+        
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+            print("Answer: " + str(fullQuestion[0][2]))
         if (x == 20):
             print("SAMPLE GAMEPLAY ")
             p1guess = input("Player 1 enter guess: ")
@@ -398,7 +412,7 @@ def GrabQuestion(_conn):
                 print("Player 2 wins a point!")
             else:
                 print("Player 1 wins a point!")
-        print("Answer: " + str(fullQuestion[0][2]))
+        ##print("Answer: " + str(fullQuestion[0][2]))
     print("++++++++++++++++++++++++++++++++++")
 
 def main():
