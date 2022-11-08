@@ -66,11 +66,39 @@ def createStatsTable(_conn):
         #             w_capacity decimal(6,0) not null,
         #             w_suppkey decimal(9,0) not null,
         #             w_nationkey decimal(2,0) not null
+        # 		
+
         sql = """CREATE TABLE stats (
-                    s_id decimal(9,0) not null,
-                    s_category TEXT not null,
-                    s_type TEXT not null,
-                    s_answer TEXT not null)"""
+                    s_name TEXT not null,
+                    s_years int not null,
+                    s_games int not null,
+                    s_pts int not null,
+                    s_trb int not null,
+                    s_ast int not null,
+                    s_fgp int not null,
+                    s_fgt int not null,
+                    s_ftp int not null,
+                    s_efg int not null,
+                    s_allStar int not null,
+                    s_allNBA int not null,
+                    s_allRookie int not null,
+                    s_allDefensive int not null,
+                    s_blkChamp int not null,
+                    s_stlChamp int not null,
+                    s_trbChamp int not null,
+                    s_astChamp int not null,
+                    s_scoreChamp int not null,
+                    s_mostImprovedChamp int not null,
+                    s_sixthManChamp int not null,
+                    s_dpoyChamp int not null,
+                    s_royChamp int not null,
+                    s_allStarMVP int not null,
+                    s_confMVP int not null,
+                    s_finalsMVP int not null,
+                    s_MVP int not null,
+                    s_rings int not null,
+                    s_nba75 int not null
+                    )"""
 
         _conn.execute(sql)
         # _conn.execute("COMMIT")
@@ -202,7 +230,7 @@ def populateTeamTable(_conn):
     print("Populate Team Table")
     cur=_conn.cursor()
     # Opening the person-records.csv file
-    file = open('data/NBA_team_table.csv')
+    file = open('data/NBA_team_table.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
@@ -222,13 +250,21 @@ def populateStatsTable(_conn):
     print("Populate tables")
     cur=_conn.cursor()
 
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(1,'Lebron James', 2007, 1, 5000, 1))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(2,'Steph Curry', 2012, 1, 4210, 2))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(3,'Kyrie Irving', 2010, 1, 4120, 3))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(4,'Anthony Davis', 2014, 22, 3200, 4))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(5,'James Harden', 2008, 3, 4200, 5))
-    cur.execute("INSERT INTO player VALUES ({},'{}',{},{},{},{})".format(6,'Russell Westbrook', 2008, 1, 3200, 6))
-    counter=1
+   # Opening the stats.csv file
+    file = open('data/stats.csv', encoding="utf8")
+ 
+    # Reading the contents of the
+    # person-records.csv file
+    contents = csv.reader(file)
+ 
+    # SQL query to insert data into the
+    # stats table
+    insert_records = "INSERT INTO stats VALUES(?, ?, ?, ?, ?, ? ,?, ?,?, ?, ?, ?, ?, ? ,?, ?,?, ?, ?, ?, ?, ? ,?, ?,?, ?, ?,?,?)"
+ 
+    # Importing the contents of the file
+    # into our stats table
+    cur.executemany(insert_records, contents)
+    print("Populated stats!")
     print("++++++++++++++++++++++++++++++++++")
 
 def populateQuestionsTable(_conn):
@@ -236,7 +272,7 @@ def populateQuestionsTable(_conn):
     print("Populate tables")
     cur=_conn.cursor()
     # Opening the person-records.csv file
-    file = open('data/questions.csv')
+    file = open('data/questions.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
@@ -256,7 +292,7 @@ def populatePayrollTable(_conn):
     print("Populate Payroll tables")
     cur=_conn.cursor()
         # Opening the person-records.csv file
-    file = open('data/NBA-salaries.csv')
+    file = open('data/NBA-salaries.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
@@ -276,7 +312,7 @@ def populateQuestionTypesTable(_conn):
     print("Populate tables")
     cur=_conn.cursor()
     # Opening the person-records.csv file
-    file = open('data/questionTypes.csv')
+    file = open('data/questionTypes.csv', encoding="utf8")
  
     # Reading the contents of the
     # person-records.csv file
@@ -364,6 +400,7 @@ def main():
         createQuestionTypesTable(conn)
         populatePlayerTable(conn)
         populateTeamTable(conn)
+        populateStatsTable(conn)
         populatePayrollTable(conn)
         populateQuestionsTable(conn)
         populateQuestionTypesTable(conn)
