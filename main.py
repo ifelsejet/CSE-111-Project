@@ -414,7 +414,7 @@ def GrabQuestion(_conn):
             print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
             print("Answer: " + str(fullQuestion[0][1]))
         if (x == 20):
-            print("SAMPLE GAMEPLAY ")
+            print("SAMPLE GAMEPLAY DEMO")
             p1guess = input("Player 1 enter guess: ")
             p1guess = int(p1guess)
             # 0 - lower, 1- higher (for now)
@@ -422,7 +422,7 @@ def GrabQuestion(_conn):
             p2guess = int(p2guess)
             if(p1guess < fullQuestion[0][len(fullQuestion[0])-1] and p2guess == 1):
                 print("Player 2 wins a point!")
-            elif(p1guess > fullQuestion[0][2] and p2guess == 0):
+            elif(p1guess > fullQuestion[0][len(fullQuestion[0])-1] and p2guess == 0):
                 print("Player 2 wins a point!")
             else:
                 print("Player 1 wins a point!")
