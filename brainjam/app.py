@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+import sqlite3
 
 
 app = Flask(__name__)
@@ -10,24 +11,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basketball.db'
 # Creating an SQLAlchemy instance
 db = SQLAlchemy(app)
 
-# Models
-class Question_Types(db.Model):
-    # qt_id : Field which stores unique id for every row in
-    # database table.
-    # qt_type: Used to store the question type
-   
-    qt_id = db.Column(db.Integer, primary_key=True)
-    qt_type = db.Column(db.String(20), unique=False, nullable=False)
-   
- 
-    # repr method represents how one object of this datatable
-    # will look like
-    def __repr__(self):
-        return f"Question Types : {self.qt_type}"
- 
+def get_db_connection():
+    conn = sqlite3.connect('basketball.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route("/")
 def home():
+    conn = get_db_connection()
+    cur= conn.cursor()
+    questionTypeSQL = "SELECT * FROM questionTypes ORDER BY RANDOM() LIMIT 2;"
+    cur.execute(questionTypeSQL)
+    questionType = cur.fetchall()
+    print(str(questionType[0][1]))
     return render_template('home.html')
 @app.route("/createRoom")
 def createRoom():
