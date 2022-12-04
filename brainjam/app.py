@@ -38,8 +38,12 @@ def hello_lobby():
 @app.route('/local')
 def local():
     conn = get_db_connection()
-    GrabQuestion(conn)
-    return render_template('local.html')
+    question, answer = GrabQuestion(conn)
+    question_details = {
+        'question' : question,
+        'answer' : answer
+    }
+    return render_template('local.html', questionDetail=question_details)
 
 @app.route("/game")
 def hello_game():
@@ -49,6 +53,8 @@ def GrabQuestion(_conn):
     print("++++++++++++++++++++++++++++++++++")
     #print("Grab Question")
     # 20 random queries
+    question = ""
+    answer = ""
 
     cur=_conn.cursor()
     questionTypeSQL = "SELECT * FROM questionTypes ORDER BY RANDOM() LIMIT 2;"
@@ -75,8 +81,8 @@ def GrabQuestion(_conn):
                     """.format(statTuple[1], statTuple[2], questionTuple[0][2])
         cur.execute(fullQuestionSQL)
         fullQuestion = cur.fetchall()
-        print(questionTuple[0][1].format(statType,fullQuestion[0][0]))
-        print("Answer: " + str(fullQuestion[0][1]))
+        question = questionTuple[0][1].format(statType,fullQuestion[0][0])
+        answer = str(fullQuestion[0][1])
     elif questionType[0][1] == "payroll":
         print("IS IN PAYROLL")
         statTuple = questionTuple[0][4].split()
@@ -88,8 +94,8 @@ def GrabQuestion(_conn):
     
         cur.execute(fullQuestionSQL)
         fullQuestion = cur.fetchall()
-        print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
-        print("Answer: " + str(fullQuestion[0][2]))
+        question = questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1])
+        answer = str(fullQuestion[0][2])
     elif questionType[0][1] == "team":
         print("IS IN TEAM")
         statTuple = questionTuple[0][4].split()
@@ -102,6 +108,7 @@ def GrabQuestion(_conn):
     
         cur.execute(fullQuestionSQL)
         fullQuestion = cur.fetchall()
-        print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
-        print("Answer: " + str(fullQuestion[0][1]))
+        question = questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1])
+        answer = str(fullQuestion[0][1])
+    return question , answer
     ##print("Answer: " + str(fullQuestion[0][2]))
