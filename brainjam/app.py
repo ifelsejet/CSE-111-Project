@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 # from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
@@ -35,7 +35,7 @@ def joinRoom():
 def hello_lobby():
     return "<p>Welcome to Lobby</p>"
 
-@app.route('/local')
+@app.route('/local', methods =["GET", "POST"])
 def local():
     conn = get_db_connection()
     question, answer = GrabQuestion(conn)
@@ -43,6 +43,12 @@ def local():
         'question' : question,
         'answer' : answer
     }
+    if(request.method == "POST"):
+        guess = request.form.get("guess")
+        otherGuess = request.form.get("nextGuess").upper()
+        return "Your guess was: " + guess + ". Other player guessed " + otherGuess + " TRUE ANSWER: " + answer
+
+
     return render_template('local.html', questionDetail=question_details)
 
 @app.route("/game")
