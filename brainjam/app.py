@@ -28,6 +28,9 @@ def home():
 @app.route("/createRoom")
 def createRoom():
     return render_template('create.html')
+@app.route("/joinRoom")
+def joinRoom():
+    return render_template('join.html')
 @app.route("/lobby")
 def hello_lobby():
     return "<p>Welcome to Lobby</p>"

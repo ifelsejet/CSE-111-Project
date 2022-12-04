@@ -16,8 +16,8 @@
   <body>
     <h1 class="text-center">NBA Brain Jam!</h1>
     <div class="text-center" >
-        <button type="submit" class="btn btn-primary" href="{{url_for('createRoom')}}">Create Room</button>
-        <button type="submit" class="btn btn-primary" onclick="send()">Join Room</button>
+        <a type="submit" class="btn btn-primary" href="{{ url_for('createRoom') }}">Create Room</a>
+        <a type="submit" class="btn btn-primary" href="{{ url_for('joinRoom') }}">Join Room</a>
 
 
 
