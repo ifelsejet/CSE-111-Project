@@ -29,6 +29,9 @@
         <button type="submit">Submit Guesses</button>
         {% if submitAnswer %}
           <h2>Results!</h2>
+          <p> Player 1: {{resultDetails.first_guess}}</p>
+          <p> Player 2: {{resultDetails.second_guess}}</p>
+          <p> Answer: {{questionDetail.answer}}</p>
         {% endif %}
 
     </div>
