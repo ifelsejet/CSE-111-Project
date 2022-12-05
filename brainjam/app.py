@@ -4,6 +4,8 @@ import sqlite3
 
 
 app = Flask(__name__)
+#qCount = 1
+
 
 # adding configuration for using a sqlite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basketball.db'
@@ -18,6 +20,8 @@ def get_db_connection():
 
 @app.route("/")
 def home():
+    #global qCount
+    #qCount = 1
     conn = get_db_connection()
     cur= conn.cursor()
     questionTypeSQL = "SELECT * FROM 'questionTypes' ORDER BY RANDOM() LIMIT 2;"
@@ -38,9 +42,11 @@ def hello_lobby():
 @app.route('/local', methods =["GET", "POST"])
 def local():
     conn = get_db_connection()
-    question, answer = GrabQuestion(conn)
+    #global qCount
+    question, answer, qCount = GrabQuestion(conn)
     question_details = {
         'question' : question,
+        'qCount' : qCount, 
         'answer' : answer
     }
     
@@ -52,6 +58,8 @@ def local():
         'first_guess' : guess,
         'second_guess': otherGuess
         }
+        #qCount += 1
+       # print("question count should be ", qCount)
         submitAnswer = True
         return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer)
         #return "Your guess was: " + guess + ". Other player guessed " + otherGuess + " TRUE ANSWER: " + answer
@@ -63,12 +71,15 @@ def local():
 def hello_game():
     return render_template('game.html')
 
+qCount = 0
 def GrabQuestion(_conn):
     print("++++++++++++++++++++++++++++++++++")
     #print("Grab Question")
     # 20 random queries
     question = ""
     answer = ""
+    global qCount
+    qCount += 1
 
     cur=_conn.cursor()
     questionTypeSQL = "SELECT * FROM questionTypes ORDER BY RANDOM() LIMIT 2;"
@@ -124,5 +135,5 @@ def GrabQuestion(_conn):
         fullQuestion = cur.fetchall()
         question = questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1])
         answer = str(fullQuestion[0][1])
-    return question , answer
+    return question , answer, qCount
     ##print("Answer: " + str(fullQuestion[0][2]))
