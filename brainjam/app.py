@@ -4,7 +4,8 @@ import sqlite3
 
 
 app = Flask(__name__)
-#qCount = 1
+qCount = 0
+
 
 
 # adding configuration for using a sqlite database
@@ -14,14 +15,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basketball.db'
 # db = SQLAlchemy(app)
 
 def get_db_connection():
-    conn = sqlite3.connect('brainjam/basketball.db')
+    conn = sqlite3.connect('basketball.db')
     conn.row_factory = sqlite3.Row
     return conn
 
 @app.route("/")
 def home():
-    #global qCount
-    #qCount = 1
+    global qCount
+    qCount = 0
     conn = get_db_connection()
     cur= conn.cursor()
     questionTypeSQL = "SELECT * FROM 'questionTypes' ORDER BY RANDOM() LIMIT 2;"
@@ -52,6 +53,7 @@ def local():
     
     submitAnswer = False
     if(request.method == "POST"):
+        print("made a request!")
         guess = request.form.get("guess")
         otherGuess = request.form.get("nextGuess").upper()
         result_details = {
@@ -71,7 +73,6 @@ def local():
 def hello_game():
     return render_template('game.html')
 
-qCount = 0
 def GrabQuestion(_conn):
     print("++++++++++++++++++++++++++++++++++")
     #print("Grab Question")
