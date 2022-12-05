@@ -8,8 +8,12 @@ qCount = 0
 
 players = {
     "Player 1" : 0,
-    "Player 2" : 0
+    "Player 2" : 0,
+    "Current Player" : 1,
+    "Winning Player": -1000
 }
+
+
 
 
 
@@ -26,8 +30,11 @@ def get_db_connection():
 
 @app.route("/")
 def home():
-    global qCount
+    global qCount, players
     qCount = 0
+    players["Player 1"] = 0
+    players["Player 2"] = 0
+
     conn = get_db_connection()
     cur= conn.cursor()
     questionTypeSQL = "SELECT * FROM 'questionTypes' ORDER BY RANDOM() LIMIT 2;"
@@ -48,12 +55,14 @@ lastAnswer = ""
 @app.route('/local', methods =["GET", "POST"])
 def local():
     conn = get_db_connection()
-    #global qCount
+    global qCount
     global players
     global lastAnswer
+    player = ""
     print(players["Player 1"])
     print(players["Player 2"])
-    
+    print(qCount)
+
     question, answer, qCount = GrabQuestion(conn)
     question_details = {
         'question' : question,
@@ -70,27 +79,111 @@ def local():
         otherGuess = request.form.get("nextGuess").upper()
         #beforeAnswer = lastAnswer 
 
+        #HIGHER
+
+        print("current player: " + str(players["Current Player"]))
+        print("GUESS:", guess)
+        print("ANSWER:", lastAnswer)
+        print(type(guess), type(lastAnswer))
+        '''P1 GUESS: 1; ANSWER: 600000; HIGHER'''
+        if(players["Current Player"] == 1):
+            if(float(guess) == float(lastAnswer)):
+                print("Player 1 got EXACT answer")
+                players["Player 1"] += 1
+                player = "1"
+        if(players["Current Player"] == 2):
+            if(float(guess) == float(lastAnswer)):
+                print("Player 2 got EXACT answer")
+                players["Player 2"] += 1
+                player = "2"
+        if(float(guess) < float(lastAnswer)):
+            if(otherGuess == "HIGHER"):
+                if(players["Current Player"] == 1):
+                    players["Player 2"] += 1
+                    print("Increased player 2 count inside HIGHER block")
+                    player = "2"
+                else: 
+                    players["Player 1"] += 1
+                    print("Increased player 1 count inside HIGHER block (else)")
+                    player = "1"
+            else:
+                if(players["Current Player"] == 1):
+                    players["Player 1"] += 1
+                    print("Increased player 1 count inside HIGHER block")
+                    player = "1"
+                else: 
+                    players["Player 2"] += 1
+                    print("Increased player 2 count inside HIGHER block (else)")
+                    player = "2"
+        #LOWER
+        #'''P1 GUESS:4; ANSWER: 1; LOWER'''
+        elif(float(guess) > float(lastAnswer)):
+            if(otherGuess == "LOWER"):
+                if(players["Current Player"] == 1):
+                    players["Player 2"] += 1
+                    print("Increased player 2 count inside LOWER block")
+                    player = "2"
+
+                else: 
+                    players["Player 1"] += 1
+                    print("Increased player 1 count inside LOWER block (else)")
+                    player = "1"
+            else:
+                if(players["Current Player"] == 1):
+                    players["Player 1"] += 1
+                    print("Increased player 1 count inside LOWER block")
+                    player = "1"
+                else: 
+                    players["Player 2"] += 1
+                    print("Increased player 2 count inside LOWER block (else)")
+                    player = "2"
         #print("previous answer", beforeAnswer)
         result_details = {
         'first_guess' : guess,
         'second_guess': otherGuess,
-        "answer": lastAnswer
+        "answer": lastAnswer,
+        "winningPoint": player
         }
         lastAnswer = question_details["answer"]
         #lastAnswer = beforeAnswer
         print("Last answer is: ", lastAnswer)   #qCount += 1
        # print("question count should be ", qCount)
         submitAnswer = True
-        return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer, resultDetails=result_details)
+        if(qCount % 2 != 0):
+            players["Current Player"] = 1
+
+        else:
+            players["Current Player"] = 2
+        if(players["Player 1"] > 2):
+            players["Winning Player"] = 1
+            return render_template('gameOver.html', playerDetails = players)
+        elif(players["Player 2"] > 2):
+            players["Winning Player"] = 2
+            return render_template('gameOver.html', playerDetails = players)
+        return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer, resultDetails=result_details, playerDetails = players)
         #return "Your guess was: " + guess + ". Other player guessed " + otherGuess + " TRUE ANSWER: " + answer
 
+
+    if(qCount % 2 != 0):
+        print("set curr player to 1!")
+        players["Current Player"] = 1
+
+    else:
+        print("set curr player to 2!", qCount)
+
+        players["Current Player"] = 2
     lastAnswer = question_details["answer"]
+   
     print("rendered outside form: ", lastAnswer)
-    return render_template('local.html', questionDetail=question_details)
+    return render_template('local.html', questionDetail=question_details, playerDetails = players)
 
 @app.route("/game")
 def hello_game():
     return render_template('game.html')
+
+@app.route("/gameOver")
+def end_game():
+    return render_template('gameOver.html')
 
 def GrabQuestion(_conn):
     print("++++++++++++++++++++++++++++++++++")
