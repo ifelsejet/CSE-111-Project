@@ -66,7 +66,8 @@ def local():
         otherGuess = request.form.get("nextGuess").upper()
         result_details = {
         'first_guess' : guess,
-        'second_guess': otherGuess
+        'second_guess': otherGuess,
+        "answer": question_details["answer"]
         }
         #qCount += 1
        # print("question count should be ", qCount)
