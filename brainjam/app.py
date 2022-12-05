@@ -44,14 +44,16 @@ def joinRoom():
 @app.route("/lobby")
 def hello_lobby():
     return "<p>Welcome to Lobby</p>"
-
+lastAnswer = ""
 @app.route('/local', methods =["GET", "POST"])
 def local():
     conn = get_db_connection()
     #global qCount
     global players
+    global lastAnswer
     print(players["Player 1"])
     print(players["Player 2"])
+    
     question, answer, qCount = GrabQuestion(conn)
     question_details = {
         'question' : question,
@@ -60,22 +62,30 @@ def local():
     }
     
     submitAnswer = False
+    print("before submit: ", lastAnswer)    
+
     if(request.method == "POST"):
         print("made a request!")
         guess = request.form.get("guess")
         otherGuess = request.form.get("nextGuess").upper()
+        #beforeAnswer = lastAnswer 
+
+        #print("previous answer", beforeAnswer)
         result_details = {
         'first_guess' : guess,
         'second_guess': otherGuess,
-        "answer": question_details["answer"]
+        "answer": lastAnswer
         }
-        #qCount += 1
+        lastAnswer = question_details["answer"]
+        #lastAnswer = beforeAnswer
+        print("Last answer is: ", lastAnswer)   #qCount += 1
        # print("question count should be ", qCount)
         submitAnswer = True
         return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer, resultDetails=result_details)
         #return "Your guess was: " + guess + ". Other player guessed " + otherGuess + " TRUE ANSWER: " + answer
 
-
+    lastAnswer = question_details["answer"]
+    print("rendered outside form: ", lastAnswer)
     return render_template('local.html', questionDetail=question_details)
 
 @app.route("/game")
