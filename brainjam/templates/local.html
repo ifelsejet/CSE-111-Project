@@ -27,6 +27,9 @@
         <input type="text" id="guess" name="guess" placeholder="">
         <input type="text" id="nextGuess" name="nextGuess" placeholder="">
         <button type="submit">Submit Guesses</button>
+        {% if submitAnswer %}
+          <h2>Results!</h2>
+        {% endif %}
 
     </div>
 

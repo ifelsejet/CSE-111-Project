@@ -43,10 +43,18 @@ def local():
         'question' : question,
         'answer' : answer
     }
+    
+    submitAnswer = False
     if(request.method == "POST"):
         guess = request.form.get("guess")
         otherGuess = request.form.get("nextGuess").upper()
-        return "Your guess was: " + guess + ". Other player guessed " + otherGuess + " TRUE ANSWER: " + answer
+        result_details = {
+        'first_guess' : guess,
+        'second_guess': otherGuess
+        }
+        submitAnswer = True
+        return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer)
+        #return "Your guess was: " + guess + ". Other player guessed " + otherGuess + " TRUE ANSWER: " + answer
 
 
     return render_template('local.html', questionDetail=question_details)
