@@ -14,7 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basketball.db'
 # db = SQLAlchemy(app)
 
 def get_db_connection():
-    conn = sqlite3.connect('basketball.db')
+    conn = sqlite3.connect('brainjam/basketball.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -61,7 +61,7 @@ def local():
         #qCount += 1
        # print("question count should be ", qCount)
         submitAnswer = True
-        return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer)
+        return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer, resultDetails=result_details)
         #return "Your guess was: " + guess + ". Other player guessed " + otherGuess + " TRUE ANSWER: " + answer
 
 
