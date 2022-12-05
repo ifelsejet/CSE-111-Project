@@ -6,6 +6,11 @@ import sqlite3
 app = Flask(__name__)
 qCount = 0
 
+players = {
+    "Player 1" : 0,
+    "Player 2" : 0
+}
+
 
 
 # adding configuration for using a sqlite database
@@ -44,6 +49,9 @@ def hello_lobby():
 def local():
     conn = get_db_connection()
     #global qCount
+    global players
+    print(players["Player 1"])
+    print(players["Player 2"])
     question, answer, qCount = GrabQuestion(conn)
     question_details = {
         'question' : question,
