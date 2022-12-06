@@ -30,6 +30,7 @@ def get_db_connection():
 
 @app.route("/")
 def home():
+    print("TEST")
     global qCount, players
     qCount = 0
     players["Player 1"] = 0
@@ -205,48 +206,88 @@ def GrabQuestion(_conn):
                     """.format(questionType[0][1])
     cur.execute(questionSQL)
     questionTuple = cur.fetchall()
+    print(questionTuple)
     print("Question: "+ questionTuple[0][1])
     print("Stat: " + questionTuple[0][4])
     print(questionType[0][1])
     if questionType[0][1] == "stats":
         print("IS IN STATS BLOCK")
         statTuple = questionTuple[0][4].split()
-        statType = statTuple[0] # PTS, REB, etc.
-        fullQuestionSQL = """
-                    SELECT {}, {}
-                    FROM {}
-                    ORDER BY RANDOM() LIMIT 1
-                    """.format(statTuple[1], statTuple[2], questionTuple[0][2])
-        cur.execute(fullQuestionSQL)
-        fullQuestion = cur.fetchall()
-        question = questionTuple[0][1].format(statType,fullQuestion[0][0])
-        answer = str(fullQuestion[0][1])
+        print(statTuple)
+        print("Length of StatTuple: ", len(statTuple))  # length of 3 is for player stats such as PTS REB ETC.
+
+        if len(statTuple) == 3:
+
+            statType = statTuple[0] # PTS, REB, etc.
+            print("FROM ", questionTuple[0][2])
+            fullQuestionSQL = """
+                        SELECT {}, {}
+                        FROM {}
+                        ORDER BY RANDOM()
+                        """.format(statTuple[1], statTuple[2], questionTuple[0][2])
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            print(fullQuestion)
+            question = (questionTuple[0][1].format(statType,fullQuestion[0][1]))
+            answer = (str(fullQuestion[0][0]))
+        elif len(statTuple) == 2:
+            fullQuestionSQL = """
+                        SELECT {}, {}
+                        FROM {}
+                        ORDER BY RANDOM() LIMIT 1
+                        """.format(statTuple[0], statTuple[1], questionTuple[0][2])
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            question = (questionTuple[0][1].format(fullQuestion[0][0]))
+            answer = (str(fullQuestion[0][1]))
+        elif len(statTuple) == 1:
+            fullQuestionSQL = """
+                        SELECT {}
+                        FROM {}
+                        ORDER BY RANDOM() LIMIT 1
+                        """.format(statTuple[0], questionTuple[0][2])
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            question = (questionTuple[0][1].format(fullQuestion[0][0]))
+            answer = (str(fullQuestion[0][1]))
     elif questionType[0][1] == "payroll":
         print("IS IN PAYROLL")
         statTuple = questionTuple[0][4].split()
         fullQuestionSQL = """
-                    SELECT {}, {}, {}
-                    FROM {}
-                    ORDER BY RANDOM() LIMIT 1
-        """.format(statTuple[0], statTuple[1], statTuple[2], questionTuple[0][2])
-    
+                        SELECT {}, {}, {}
+                        FROM {}
+                        ORDER BY RANDOM() LIMIT 1
+            """.format(statTuple[0], statTuple[1], statTuple[2], questionTuple[0][2])
+        
         cur.execute(fullQuestionSQL)
         fullQuestion = cur.fetchall()
-        question = questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1])
-        answer = str(fullQuestion[0][2])
+        question = (questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+        answer = (str(fullQuestion[0][2]))
     elif questionType[0][1] == "team":
         print("IS IN TEAM")
         statTuple = questionTuple[0][4].split()
         print(statTuple)
-        fullQuestionSQL = """
-                    SELECT  {}, {}
-                    FROM {}
-                    ORDER BY RANDOM() LIMIT 1
-        """.format(statTuple[0], statTuple[1], questionTuple[0][2])
-    
-        cur.execute(fullQuestionSQL)
-        fullQuestion = cur.fetchall()
-        question = questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1])
-        answer = str(fullQuestion[0][1])
+        if len(statTuple) == 1:
+            fullQuestionSQL = """
+                        SELECT  {}
+                        FROM {}
+                        """.format(statTuple[0], questionTuple[0][2])
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            question = (questionTuple[0][1].format(fullQuestion[0][0]))
+            answer = str(fullQuestion[0][0])
+        else:
+            fullQuestionSQL = """
+                        SELECT  {}, {}
+                        FROM {}
+                        ORDER BY RANDOM() LIMIT 1
+                """.format(statTuple[0], statTuple[1], questionTuple[0][2])
+        
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            question = questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1])
+            answer = str(fullQuestion[0][1])
     return question , answer, qCount
     ##print("Answer: " + str(fullQuestion[0][2]))
+
+
