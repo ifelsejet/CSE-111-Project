@@ -10,6 +10,7 @@ players = {
     "Player 1" : 0,
     "Player 2" : 0,
     "Current Player" : 1,
+    "Waiting Player" : 2, 
     "Winning Player": -1000
 }
 
@@ -157,9 +158,13 @@ def local():
         submitAnswer = True
         if(qCount % 2 != 0):
             players["Current Player"] = 1
+            players["Waiting Player"] = 2
+
 
         else:
             players["Current Player"] = 2
+            players["Waiting Player"] = 1
+
         if(players["Player 1"] > 2):
             players["Winning Player"] = 1
             return render_template('gameOver.html', playerDetails = players)
@@ -173,11 +178,15 @@ def local():
     if(qCount % 2 != 0):
         print("set curr player to 1!")
         players["Current Player"] = 1
+        players["Waiting Player"] = 2
+
 
     else:
         print("set curr player to 2!", qCount)
 
         players["Current Player"] = 2
+        players["Waiting Player"] = 1
+
     lastAnswer = question_details["answer"]
    
     print("rendered outside form: ", lastAnswer)

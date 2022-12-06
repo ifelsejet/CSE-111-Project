@@ -28,7 +28,7 @@
     <div class="text-center">
       <form action="{{ url_for("local")}}" method="post">
         <label for="guess">Guess:</label>
-        <input type="text" id="guess" name="guess" placeholder="" required>
+        <input type="number" id="guess" name="guess" placeholder="" required>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="radio" value="higher" id="higherRadio" required>
           <label class="form-check-label" for="higherRadio">
@@ -45,8 +45,8 @@
         <button type="submit" class="btn btn-outline-success" >Submit Guesses</button>
         {% if submitAnswer %}
           <h2>Question {{questionDetail.qCount -1 }} results!: </h2>
-          <p> Player 1: {{resultDetails.first_guess}}</p>
-          <p> Player 2: {{resultDetails.second_guess}}</p>
+          <p> Player {{playerDetails["Waiting Player"]}} guessed: {{resultDetails.first_guess}}</p>
+          <p> Player {{playerDetails["Current Player"]}} guessed: {{resultDetails.second_guess}}</p>
           <p> Answer: {{resultDetails.answer}}</p>
           <p> Point goes to Player {{resultDetails.winningPoint}}!</p>
         {% endif %}
