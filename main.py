@@ -378,7 +378,6 @@ def GrabQuestion(_conn):
         if questionType[0][1] == "stats":
             print("IS IN STATS BLOCK")
             statTuple = questionTuple[0][4].split()
-            print(statTuple)
             print("Length of StatTuple: ", len(statTuple))  # length of 3 is for player stats such as PTS REB ETC.
 
             if len(statTuple) == 3:
@@ -415,43 +414,90 @@ def GrabQuestion(_conn):
                 fullQuestion = cur.fetchall()
                 print(questionTuple[0][1].format(fullQuestion[0][0]))
                 print("Answer: " + str(fullQuestion[0][1]))
-        elif questionType[0][1] == "payroll":
-            print("IS IN PAYROLL")
-            statTuple = questionTuple[0][4].split()
-            fullQuestionSQL = """
-                        SELECT {}, {}, {}
-                        FROM {}
-                        ORDER BY RANDOM() LIMIT 1
-            """.format(statTuple[0], statTuple[1], statTuple[2], questionTuple[0][2])
+        # elif questionType[0][1] == "payroll":
+        #     print("IS IN PAYROLL")
+        #     statTuple = questionTuple[0][4].split()
+        #     fullQuestionSQL = """
+        #                 SELECT {}, {}, {}
+        #                 FROM {}
+        #                 ORDER BY RANDOM() LIMIT 1
+        #     """.format(statTuple[0], statTuple[1], statTuple[2], questionTuple[0][2])
         
-            cur.execute(fullQuestionSQL)
-            fullQuestion = cur.fetchall()
-            print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
-            print("Answer: " + str(fullQuestion[0][2]))
-        elif questionType[0][1] == "team":
-            print("IS IN TEAM")
+        #     cur.execute(fullQuestionSQL)
+        #     fullQuestion = cur.fetchall()
+        #     print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+        #     print("Answer: " + str(fullQuestion[0][2]))
+        # elif questionType[0][1] == "team":
+        #     print("IS IN TEAM")
+        #     statTuple = questionTuple[0][4].split()
+        #     print(statTuple)
+        #     if len(statTuple) == 1:
+        #         fullQuestionSQL = """
+        #                 SELECT  {}
+        #                 FROM {}
+        #                 """.format(statTuple[0], questionTuple[0][2])
+        #         cur.execute(fullQuestionSQL)
+        #         fullQuestion = cur.fetchall()
+        #         print(questionTuple[0][1].format(fullQuestion[0][0]))
+        #         print("Answer: " + str(fullQuestion[0][0]))
+        #     else:
+        #         fullQuestionSQL = """
+        #                 SELECT  {}, {}
+        #                 FROM {}
+        #                 ORDER BY RANDOM() LIMIT 1
+        #         """.format(statTuple[0], statTuple[1], questionTuple[0][2])
+        
+        #         cur.execute(fullQuestionSQL)
+        #         fullQuestion = cur.fetchall()
+        #         print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
+        #         print("Answer: " + str(fullQuestion[0][1]))
+
+
+
+        elif questionType[0][1] == "complex1":
+            print("IS IN COMPLEX")
             statTuple = questionTuple[0][4].split()
             print(statTuple)
-            if len(statTuple) == 1:
-                fullQuestionSQL = """
-                        SELECT  {}
+            statType = statTuple[0] # PTS, REB, etc.
+            tables = questionTuple[0][3].split()
+            print("tables: ", tables)
+            sqlInputs = questionTuple[0][4].split()
+            fullQuestionSQL = """
+                        SELECT COUNT(*)
                         FROM {}
-                        """.format(statTuple[0], questionTuple[0][2])
-                cur.execute(fullQuestionSQL)
-                fullQuestion = cur.fetchall()
-                print(questionTuple[0][1].format(fullQuestion[0][0]))
-                print("Answer: " + str(fullQuestion[0][0]))
-            else:
-                fullQuestionSQL = """
-                        SELECT  {}, {}
+                        JOIN {} ON {}.{} = {}.{}
+                        WHERE {} > {}
+                        AND {} > {}
+                        """.format(tables[0], tables[1], tables[0], sqlInputs[2], tables[1], sqlInputs[3], sqlInputs[4], sqlInputs[1], sqlInputs[5], sqlInputs[0])
+            print(fullQuestionSQL)
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            print(questionTuple[0][1].format(sqlInputs[1]))
+            print("Answer: " + str(fullQuestion[0][0]))
+
+        elif questionType[0][1] == "complex2":
+            print("IS IN COMPLEX")
+            statTuple = questionTuple[0][4].split()
+            print(statTuple)
+            statType = statTuple[0] # PTS, REB, etc.
+            tables = questionTuple[0][3].split()
+            print("tables: ", tables)
+            sqlInputs = questionTuple[0][4].split()
+            fullQuestionSQL = """
+                        SELECT COUNT(*)
                         FROM {}
-                        ORDER BY RANDOM() LIMIT 1
-                """.format(statTuple[0], statTuple[1], questionTuple[0][2])
-        
-                cur.execute(fullQuestionSQL)
-                fullQuestion = cur.fetchall()
-                print(questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1]))
-                print("Answer: " + str(fullQuestion[0][1]))
+                        JOIN {} ON {}.{} = {}.{}
+                        JOIN {} ON {}.{} = {}.{}
+                        WHERE {} > {}
+                        AND {} > {}
+                        AND {} > {}
+                        """.format(tables[0], tables[1], tables[0], sqlInputs[3], tables[1], sqlInputs[4], tables[2], tables[2], sqlInputs[5], tables[1], sqlInputs[4],sqlInputs[4], sqlInputs[1], sqlInputs[5], sqlInputs[0], sqlInputs[6], sqlInputs[2])
+            print(fullQuestionSQL)
+            cur.execute(fullQuestionSQL)
+            fullQuestion = cur.fetchall()
+            print(questionTuple[0][1].format(sqlInputs[1], sqlInputs[2]))
+            print("Answer: " + str(fullQuestion[0][0]))
+
         if (x == 20):
             print("SAMPLE GAMEPLAY DEMO")
             p1guess = input("Player 1 enter guess: ")

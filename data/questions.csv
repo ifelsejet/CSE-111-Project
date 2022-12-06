@@ -13,3 +13,5 @@
 13,How many {} has {} been a part of?,stats,Player, games s_games s_name
 14,How many NBA Championships have there been?,team,team, SUM(t_numChampionships)
 15,How many {} has {} played in the NBA?,stats,Player, years s_years s_name
+16,How many players averaged more than 20 PTS that were drafted after {},complex1, stats player, 20 1990 s_name p_name p_draftYear s_pts
+16,How many players averaged more than 20 PTS that were drafted after {} that make atleast ${},complex2, stats player payroll, 20 1990 2000000 s_name p_name player_name player_salary p_draftYear s_pts
