@@ -213,6 +213,7 @@ def GrabQuestion(_conn):
     questionSQL = """SELECT * 
                     FROM questions 
                     WHERE q_type = '{}'
+                    ORDER BY RANDOM() LIMIT 1
                     """.format(questionType[0][1])
     cur.execute(questionSQL)
     questionTuple = cur.fetchall()
