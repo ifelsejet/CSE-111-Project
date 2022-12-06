@@ -450,7 +450,7 @@ def main():
         populatePayrollTable(conn)
         populateQuestionsTable(conn)
         populateQuestionTypesTable(conn)
-    GrabQuestion(conn)
+    #GrabQuestion(conn)
     closeConnection(conn, database)
 
 
