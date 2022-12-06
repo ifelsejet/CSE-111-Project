@@ -294,6 +294,54 @@ def GrabQuestion(_conn):
             fullQuestion = cur.fetchall()
             question = questionTuple[0][1].format(fullQuestion[0][0],fullQuestion[0][1])
             answer = str(fullQuestion[0][1])
+    
+    elif questionType[0][1] == "complex1":
+            print("IS IN COMPLEX")
+            statTuple = questionTuple[0][4].split()
+            print(statTuple)
+            statType = statTuple[0] # PTS, REB, etc.
+            tables = questionTuple[0][3].split()
+            print("tables: ", tables)
+            sqlInputs = questionTuple[0][4].split()
+            fullQuestionSQL = """
+                        SELECT COUNT(*)
+                        FROM {}
+                        JOIN {} ON {}.{} = {}.{}
+                        WHERE {} > ?
+                        AND {} > ?
+                        """.format(tables[0], tables[1], tables[0], sqlInputs[2], tables[1], sqlInputs[3], sqlInputs[4], sqlInputs[5])
+            print(fullQuestionSQL)
+            arguments = [sqlInputs[1], sqlInputs[0]]
+            cur.execute(fullQuestionSQL, arguments)
+            fullQuestion = cur.fetchall()
+            question = (questionTuple[0][1].format(sqlInputs[1]))
+            answer =(str(fullQuestion[0][0]))
+
+    elif questionType[0][1] == "complex2":
+        print("IS IN COMPLEX")
+        statTuple = questionTuple[0][4].split()
+        print(statTuple)
+        statType = statTuple[0] # PTS, REB, etc.
+        tables = questionTuple[0][3].split()
+        print("tables: ", tables)
+        sqlInputs = questionTuple[0][4].split()
+        fullQuestionSQL = """
+                    SELECT COUNT(*)
+                    FROM {}
+                    JOIN {} ON {}.{} = {}.{}
+                    JOIN {} ON {}.{} = {}.{}
+                    WHERE {} > ?
+                    AND {} > ?
+                    AND {} > ?
+                    """.format(tables[0], tables[1], tables[0], sqlInputs[3], tables[1], sqlInputs[4], tables[2], tables[2], sqlInputs[5], tables[1], sqlInputs[4],sqlInputs[4], sqlInputs[5], sqlInputs[6])
+        arguments = [sqlInputs[1], sqlInputs[0], sqlInputs[2]]
+        print(fullQuestionSQL)
+        cur.execute(fullQuestionSQL, arguments)
+        fullQuestion = cur.fetchall()
+        question = (questionTuple[0][1].format(sqlInputs[1], sqlInputs[2]))
+        answer = (str(fullQuestion[0][0]))
+
+
     return question , answer, qCount
     ##print("Answer: " + str(fullQuestion[0][2]))
 

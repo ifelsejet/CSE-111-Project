@@ -466,11 +466,12 @@ def GrabQuestion(_conn):
                         SELECT COUNT(*)
                         FROM {}
                         JOIN {} ON {}.{} = {}.{}
-                        WHERE {} > {}
-                        AND {} > {}
-                        """.format(tables[0], tables[1], tables[0], sqlInputs[2], tables[1], sqlInputs[3], sqlInputs[4], sqlInputs[1], sqlInputs[5], sqlInputs[0])
+                        WHERE {} > ?
+                        AND {} > ?
+                        """.format(tables[0], tables[1], tables[0], sqlInputs[2], tables[1], sqlInputs[3], sqlInputs[4], sqlInputs[5])
             print(fullQuestionSQL)
-            cur.execute(fullQuestionSQL)
+            arguments = [sqlInputs[1], sqlInputs[0]]
+            cur.execute(fullQuestionSQL, arguments)
             fullQuestion = cur.fetchall()
             print(questionTuple[0][1].format(sqlInputs[1]))
             print("Answer: " + str(fullQuestion[0][0]))
@@ -488,12 +489,13 @@ def GrabQuestion(_conn):
                         FROM {}
                         JOIN {} ON {}.{} = {}.{}
                         JOIN {} ON {}.{} = {}.{}
-                        WHERE {} > {}
-                        AND {} > {}
-                        AND {} > {}
-                        """.format(tables[0], tables[1], tables[0], sqlInputs[3], tables[1], sqlInputs[4], tables[2], tables[2], sqlInputs[5], tables[1], sqlInputs[4],sqlInputs[4], sqlInputs[1], sqlInputs[5], sqlInputs[0], sqlInputs[6], sqlInputs[2])
+                        WHERE {} > ?
+                        AND {} > ?
+                        AND {} > ?
+                        """.format(tables[0], tables[1], tables[0], sqlInputs[3], tables[1], sqlInputs[4], tables[2], tables[2], sqlInputs[5], tables[1], sqlInputs[4],sqlInputs[4], sqlInputs[5], sqlInputs[6])
+            arguments = [sqlInputs[1], sqlInputs[0], sqlInputs[2]]
             print(fullQuestionSQL)
-            cur.execute(fullQuestionSQL)
+            cur.execute(fullQuestionSQL, arguments)
             fullQuestion = cur.fetchall()
             print(questionTuple[0][1].format(sqlInputs[1], sqlInputs[2]))
             print("Answer: " + str(fullQuestion[0][0]))
