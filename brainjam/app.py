@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 # from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
-
 app = Flask(__name__)
 qCount = 0
 
@@ -13,10 +12,6 @@ players = {
     "Waiting Player" : 2, 
     "Winning Player": -1000
 }
-
-
-
-
 
 # adding configuration for using a sqlite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basketball.db'
@@ -212,10 +207,11 @@ def GrabQuestion(_conn):
     print(questionType[0][1])
     questionSQL = """SELECT * 
                     FROM questions 
-                    WHERE q_type = '{}'
+                    WHERE q_type = ?
                     ORDER BY RANDOM() LIMIT 1
-                    """.format(questionType[0][1])
-    cur.execute(questionSQL)
+                    """
+    args = [questionType[0][1]] # question_type
+    cur.execute(questionSQL, args)
     questionTuple = cur.fetchall()
     print(questionTuple)
     print("Question: "+ questionTuple[0][1])
