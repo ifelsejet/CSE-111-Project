@@ -160,10 +160,10 @@ def local():
             players["Current Player"] = 2
             players["Waiting Player"] = 1
 
-        if(players["Player 1"] > 2):
+        if(players["Player 1"] > 4):
             players["Winning Player"] = 1
             return render_template('gameOver.html', playerDetails = players)
-        elif(players["Player 2"] > 2):
+        elif(players["Player 2"] > 4):
             players["Winning Player"] = 2
             return render_template('gameOver.html', playerDetails = players)
         return render_template('local.html', questionDetail=question_details, submitAnswer = submitAnswer, resultDetails=result_details, playerDetails = players)
