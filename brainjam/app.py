@@ -76,8 +76,13 @@ def local():
 
     if(request.method == "POST"):
         print("made a request!")
+        print("REQUEST PRINTING")
+        print(request.form)
+        
         guess = request.form.get("guess")
-        otherGuess = request.form.get("nextGuess").upper()
+        otherGuess = request.form.get("radio").upper()
+        #radio = request.form.get("radio").upper()
+        #print("Radio selection is", radio)
         #beforeAnswer = lastAnswer 
 
         #HIGHER
@@ -177,10 +182,6 @@ def local():
    
     print("rendered outside form: ", lastAnswer)
     return render_template('local.html', questionDetail=question_details, playerDetails = players)
-
-@app.route("/game")
-def hello_game():
-    return render_template('game.html')
 
 @app.route("/gameOver")
 def end_game():

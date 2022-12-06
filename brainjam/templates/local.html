@@ -28,9 +28,21 @@
     <div class="text-center">
       <form action="{{ url_for("local")}}" method="post">
         <label for="guess">Guess:</label>
-        <input type="text" id="guess" name="guess" placeholder="">
-        <input type="text" id="nextGuess" name="nextGuess" placeholder="">
-        <button type="submit">Submit Guesses</button>
+        <input type="text" id="guess" name="guess" placeholder="" required>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radio" value="higher" id="higherRadio" required>
+          <label class="form-check-label" for="higherRadio">
+            HIGHER!
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radio" value="lower" id="lowerRadio" required>
+          <label class="form-check-label" for="lowerRadio">
+            LOWER!
+          </label>
+        </div>
+        
+        <button type="submit" class="btn btn-outline-success" >Submit Guesses</button>
         {% if submitAnswer %}
           <h2>Question {{questionDetail.qCount -1 }} results!: </h2>
           <p> Player 1: {{resultDetails.first_guess}}</p>
