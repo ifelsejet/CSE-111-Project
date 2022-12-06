@@ -14,4 +14,13 @@
 14,How many NBA Championships have there been?,team,team, SUM(t_numChampionships)
 15,How many {} has {} played in the NBA?,stats,Player, years s_years s_name
 16,How many players averaged more than 20 PTS that were drafted after {},complex1, stats player, 20 1990 s_name p_name p_draftYear s_pts
-16,How many players averaged more than 20 PTS that were drafted after {} that make atleast ${},complex2, stats player payroll, 20 1990 2000000 s_name p_name player_name player_salary p_draftYear s_pts
+17,How many players averaged more than 10 AST that were drafted after {},complex1, stats player, 10 1997 s_name p_name p_draftYear s_ast
+18,How many players averaged more than 34 PTS that were drafted after {},complex1, stats player, 34 1986 s_name p_name p_draftYear s_pts
+19,How many players averaged more than 6 PTS that were drafted after {},complex1, stats player, 6 2000 s_name p_name p_draftYear s_pts
+20,How many players averaged more than 4 REB that were drafted after {},complex1, stats player, 4 1999 s_name p_name p_draftYear s_trb
+21,How many players averaged more than 4 REB that were drafted after {} that make atleast ${},complex2, stats player payroll, 4 1990 2000000 s_name p_name player_name player_salary p_draftYear s_treb
+22,How many players averaged more than 10 PTS that were drafted after {} that make atleast ${},complex2, stats player payroll, 10 1999 5020000 s_name p_name player_name player_salary p_draftYear s_ast
+23,How many players averaged more than 8 AST that were drafted after {} that make atleast ${},complex2, stats player payroll, 8 1980 3430000 s_name p_name player_name player_salary p_draftYear s_pts
+24,How many players averaged more than 18 PTS that were drafted after {} that make atleast ${},complex2, stats player payroll, 18 1988 889900 s_name p_name player_name player_salary p_draftYear s_pts
+25,How many players averaged more than 25 PTS that were drafted after {} that make atleast ${},complex2, stats player payroll, 25 2000 1000000 s_name p_name player_name player_salary p_draftYear s_pts
+26,How many players averaged more than 12 AST that were drafted after {} that make atleast ${},complex2, stats player payroll, 12 1991 2300000 s_name p_name player_name player_salary p_draftYear s_ast
